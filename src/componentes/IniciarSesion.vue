@@ -7,19 +7,15 @@
         <input v-model="password" type="password" placeholder="Contraseña" required>
         <button type="submit">Iniciar Sesión</button>
       </form>
-      <router-link to="/registro">Regístrate ahora</router-link>
-      
-      <!-- Mensaje de usuario autenticado -->
+      <router-link to="/signup">Regístrate ahora</router-link>
       <p v-if="authenticated" style="color: green;">¡Usuario autenticado correctamente!</p>
-      
-      <!-- Mensaje de error -->
       <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
     </div>
   </div>
 </template>
 
 <script>
-import { signInWithEmailAndPassword, getAuth } from 'firebase/auth';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -31,18 +27,30 @@ export default {
     };
   },
   methods: {
+    ...mapActions('userState', ['login']),
     async signIn() {
       try {
         const { email, password } = this;
-        const auth = getAuth();
-        const { user } = await signInWithEmailAndPassword(auth, email, password);
-        console.log(user);
+        await this.login({ email, password });
         this.authenticated = true;
-        this.errorMessage = ''; // Clear any previous error messages
+        this.errorMessage = '';
+        this.$router.push('/'); // Redirige a la ruta raíz después del inicio de sesión exitoso
       } catch (error) {
         console.error('Error al iniciar sesión:', error.message);
-        this.errorMessage = 'Error al iniciar sesión: ' + error.message;
+        this.errorMessage = this.getErrorMessage(error.code);
         this.authenticated = false;
+      }
+    },
+    getErrorMessage(code) {
+      switch (code) {
+        case 'auth/user-not-found':
+          return 'Usuario no encontrado. Verifica tu correo electrónico.';
+        case 'auth/wrong-password':
+          return 'Contraseña incorrecta. Intenta nuevamente.';
+        case 'auth/invalid-email':
+          return 'Correo electrónico inválido. Verifica el formato.';
+        default:
+          return 'Error al iniciar sesión. Intenta nuevamente.';
       }
     }
   }
@@ -87,7 +95,7 @@ button:hover {
   justify-content: center;
   flex-direction: column;
   width: 30%;
-  margin: 2rem auto; 
+  margin: 2rem auto;
 }
 
 .login-form form {

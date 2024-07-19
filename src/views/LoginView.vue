@@ -1,18 +1,13 @@
 <template>
-  <div>
-    <IniciarSesion />
-  </div>
+  <IniciarSesion />
 </template>
 
 <script>
-import IniciarSesion from '../componentes/IniciarSesion.vue'; 
+import IniciarSesion from '../componentes/IniciarSesion.vue';
 
 export default {
   components: {
-    IniciarSesion,
+    IniciarSesion
   }
 };
 </script>
-
-<style>
-</style>

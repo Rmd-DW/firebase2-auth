@@ -1,7 +1,8 @@
 <template>
-  <div class="home">
-    <h1>Bienvenidos al Home</h1>
-    <img alt="Vue logo" src="@/assets/logo.png">
+  <div>
+    <h1>Bienvenido a la página de inicio</h1>
+    <p>Este es el contenido de la página de inicio.</p>
+    <img src="../assets/logo.png" alt="">
   </div>
 </template>
 
@@ -10,6 +11,8 @@ export default {
   name: 'HomeView'
 };
 </script>
+
+
 
 <style scoped>
 .home {
